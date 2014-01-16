@@ -1,12 +1,12 @@
 class SortedArray
   attr_reader :internal_arr
 
-  def initialize arr=[]
+  def initialize(arr=[])
     @internal_arr = []
     arr.each { |el| add el }
   end
 
-  def add el
+  def add(el)
     # we are going to keep this array
     # sorted at all times. so this is ez
     lo = 0
@@ -37,23 +37,57 @@ class SortedArray
     @internal_arr.insert(lo, el)
   end
 
-  def each &block
-    raise NotImplementedError.new("You need to implement the each method!")
+  def each(&block)
+    # raise NotImplementedError.new("You need to implement the each method!")
+    index = 0
+    while index < @internal_arr.size
+      yield(@internal_arr[index])
+      index += 1
+    end
+    return @internal_arr
   end
 
-  def map &block
-    raise NotImplementedError.new("You need to implement the map method!")
+  def map(&block)
+    # raise NotImplementedError.new("You need to implement the map method!")
+    new_array = []
+    each do |element|
+      new_array << yield(element)
+    end
+    return new_array
   end
 
-  def map! &block
-    raise NotImplementedError.new("You need to implement the map! method!")
+  def map!(&block)
+    # raise NotImplementedError.new("You need to implement the map! method!")
+    index = 0
+    each do |element|
+      @internal_arr[index] = yield(element)
+      index += 1
+    end
+    return @internal_arr
   end
 
-  def find value
-    raise NotImplementedError.new("You need to implement the find method!")
+  def find(&block)
+    # raise NotImplementedError.new("You need to implement the find method!")
+    index = 0
+    while index < @internal_arr.size
+      return @internal_arr[index] if yield(@internal_arr[index])
+      index += 1
+    end
+    return nil  
+
   end
 
-  def inject acc=nil, &block
-    raise NotImplementedError.new("You need to implement the inject method!")
+  def inject(acc=nil, &block)
+    # raise NotImplementedError.new("You need to implement the inject method!")
+    each do |element|
+      if acc.nil?
+        acc = @internal_arr[0]
+      else
+        acc = yield(acc,element)
+      end
+    end
+    return acc
+
   end
+
 end
